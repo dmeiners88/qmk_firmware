@@ -28,7 +28,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+const rgblight_segment_t PROGMEM layer_0[] = RGBLIGHT_LAYER_SEGMENTS({0, 0, HSV_BLACK}); // unused
+const rgblight_segment_t PROGMEM layer_1[] = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_CYAN});
+
+const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(layer_0, layer_1);
+
+void keyboard_post_init_user(void) {
+    rgblight_layers = my_rgb_layers;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
         case VDESK:
             if (record->event.pressed) {
@@ -59,7 +68,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-layer_state_t layer_state_set_user(layer_state_t state){
+layer_state_t layer_state_set_user(layer_state_t state) {
+    rgblight_set_layer_state(0, layer_state_cmp(state, 0));
+    rgblight_set_layer_state(1, layer_state_cmp(state, 1));
+
     switch (get_highest_layer(state)) {
         case 0:
             unregister_code(KC_F24);
