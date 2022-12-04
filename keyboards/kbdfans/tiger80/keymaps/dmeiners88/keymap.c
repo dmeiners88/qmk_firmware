@@ -1,13 +1,10 @@
 #include QMK_KEYBOARD_H
 
-enum my_keycodes {
-    MAGIC = SAFE_RANGE,
-    VDESK,
-    ESC_BOOT
-};
+enum my_keycodes { MAGIC = SAFE_RANGE, VDESK, ESC_BOOT };
 
 static uint8_t vdesk_state = 0;
 
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [0] = LAYOUT_tkl_f13_ansi_tsangan(
@@ -29,6 +26,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 
 };
+// clang-format on
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
