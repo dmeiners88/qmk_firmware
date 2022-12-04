@@ -2,6 +2,8 @@
 
 #include "config_common.h"
 
+#define TAPPING_TERM 100
+
 #ifdef LOCKING_SUPPORT_ENABLE
 #    undef LOCKING_SUPPORT_ENABLE
 #endif
