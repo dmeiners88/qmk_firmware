@@ -13,7 +13,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,          KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,  KC_END,  KC_PGDN,
         MO(1)  , KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,          KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
         KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,          KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,          KC_UP,
-        KC_LCTL, KC_LGUI, KC_LALT,                            LT(1, KC_SPC),                                     KC_RALT, MO(1),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+        KC_LCTL, KC_LGUI, KC_LALT,                            LT(1, KC_SPC),                                     KC_RALT, MO(2),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     [1] = LAYOUT_tkl_f13_ansi_tsangan(
@@ -23,6 +23,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,
         _______,          _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,          _______,
         _______, _______, _______,                            _______,                                           _______, _______, _______, _______, _______, _______
+    ),
+
+    [2] = LAYOUT_tkl_f13_ansi_tsangan(
+        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,
+        _______,          _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,           RGB_HUI,
+        _______, _______, _______,                            _______,                                           _______, _______, _______, RGB_RMOD, RGB_HUD, RGB_MOD
     )
 
 };
@@ -51,7 +60,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             return false;
         case KC_ESC:
-            if (IS_LAYER_ON(1) && (get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
+            if (IS_LAYER_ON(2) && (get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
                 // reset to bootloader if RCTL + RALT + FN + ESC is pressed
                 reset_keyboard();
                 return false;
