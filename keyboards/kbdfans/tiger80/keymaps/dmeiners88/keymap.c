@@ -2,7 +2,7 @@
 
 enum my_keycodes { VDESK = SAFE_RANGE };
 
-static uint8_t vdesk_state = 0;
+static bool vdesk_state = false;
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -50,15 +50,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     switch (keycode) {
         case VDESK:
             if (record->event.pressed) {
-                if (vdesk_state) {
-                    tap_code16(LCTL(LGUI(KC_LEFT)));
-                    vdesk_state = 0;
-                } else {
-                    tap_code16(LCTL(LGUI(KC_RGHT)));
-                    vdesk_state = 1;
-                }
+                tap_code16(LCTL(LGUI(vdesk_state ? KC_LEFT : KC_RGHT)));
+                vdesk_state = !vdesk_state;
+                rgblight_blink_layer_repeat(1, 100, 1);
             }
-            rgblight_blink_layer_repeat(1, 100, 1);
             return false;
         case QK_BOOT:
             if ((get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
