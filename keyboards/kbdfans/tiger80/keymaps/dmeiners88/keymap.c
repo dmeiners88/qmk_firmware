@@ -58,9 +58,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                     vdesk_state = 1;
                 }
             }
+            rgblight_blink_layer_repeat(1, 100, 1);
             return false;
         case QK_BOOT:
-            return (get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT));
+            if ((get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
+                rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+                rgblight_setrgb(RGB_RED);
+                return true;
+            }
+            return false;
         default:
             return true;
     }
