@@ -26,7 +26,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [2] = LAYOUT_tkl_f13_ansi_tsangan(
-        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
+        QK_BOOT, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,
@@ -59,12 +59,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             }
             return false;
-        case KC_ESC:
-            if (IS_LAYER_ON(2) && (get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
-                // reset to bootloader if RCTL + RALT + FN + ESC is pressed
-                reset_keyboard();
-                return false;
-            }
+        case QK_BOOT:
+            return (get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT));
         default:
             return true;
     }
