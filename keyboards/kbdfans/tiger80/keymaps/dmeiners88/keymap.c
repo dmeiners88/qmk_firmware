@@ -18,6 +18,30 @@ void triple_esc(qk_tap_dance_state_t *state, void *user_data) {
 
 qk_tap_dance_action_t tap_dance_actions[] = {[TR_ESC] = ACTION_TAP_DANCE_FN(triple_esc)};
 
+void change_virtual_desktop(void) {
+    if (vdesk_lock) {
+        rgblight_blink_layer_repeat(3, 250, 3);
+    } else {
+        tap_code16(LCTL(LGUI(vdesk_state ? KC_LEFT : KC_RGHT)));
+        vdesk_state = !vdesk_state;
+        rgblight_blink_layer_repeat(1, 100, 1);
+    }
+}
+
+void toggle_virtual_desktop_lock(void) {
+    vdesk_lock = !vdesk_lock;
+    rgblight_blink_layer_repeat(vdesk_lock ? 3 : 2, 750, 1);
+}
+
+bool conditionally_reset_keyboard(void) {
+    if ((get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+        rgblight_setrgb(RGB_RED);
+        return true;
+    }
+    return false;
+}
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -67,28 +91,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case VDSK_CH:
             if (record->event.pressed) {
-                if (vdesk_lock) {
-                    rgblight_blink_layer_repeat(3, 250, 3);
-                } else {
-                    tap_code16(LCTL(LGUI(vdesk_state ? KC_LEFT : KC_RGHT)));
-                    vdesk_state = !vdesk_state;
-                    rgblight_blink_layer_repeat(1, 100, 1);
-                }
+                change_virtual_desktop();
             }
             return false;
         case VDSK_LK:
             if (record->event.pressed) {
-                vdesk_lock = !vdesk_lock;
-                rgblight_blink_layer_repeat(vdesk_lock ? 3 : 2, 750, 1);
+                toggle_virtual_desktop_lock();
             }
             return false;
         case QK_BOOT:
-            if ((get_mods() & (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) == (MOD_BIT(KC_RCTL) | MOD_BIT(KC_RALT))) {
-                rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
-                rgblight_setrgb(RGB_RED);
-                return true;
-            }
-            return false;
+            return conditionally_reset_keyboard();
         default:
             return true;
     }
@@ -114,7 +126,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case TD(TR_ESC):
-            return 150;
+            return 250;
         default:
             return TAPPING_TERM;
     }
