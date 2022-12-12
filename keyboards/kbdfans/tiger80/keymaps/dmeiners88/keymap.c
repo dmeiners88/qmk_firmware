@@ -11,7 +11,7 @@ void triple_esc(qk_tap_dance_state_t *state, void *user_data) {
     if (state->count == 3) {
         tap_code16(LALT(KC_F4));
     } else {
-        for (int i = 0; i <= state->count; i++) {
+        for (int i = 0; i < state->count; i++) {
             tap_code(KC_ESC);
         }
     }
