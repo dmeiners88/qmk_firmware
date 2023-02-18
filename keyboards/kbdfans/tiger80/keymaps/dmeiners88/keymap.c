@@ -1,5 +1,10 @@
 #include QMK_KEYBOARD_H
 
+#define _BASE 0
+#define _MAGIC 1
+#define _FN 2
+#define _GAME 3
+
 enum my_keycodes { VDSK_CH = SAFE_RANGE, VDSK_LK };
 
 enum my_tap_dances { TR_ESC };
@@ -47,7 +52,7 @@ bool conditionally_reset_keyboard(void) {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [0] = LAYOUT_tkl_f13_ansi_tsangan(
+    [_BASE] = LAYOUT_tkl_f13_ansi_tsangan(
         TD(TR_ESC), KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,         KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  VDSK_CH, KC_MPLY, KC_MNXT, KC_MUTE,
         KC_GRV,     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,          KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_INS,  KC_HOME, KC_PGUP,
         KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,          KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,  KC_END,  KC_PGDN,
@@ -56,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL,    KC_LGUI, KC_LALT,                            LT(1, KC_SPC),                                     KC_RALT, MO(2),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
-    [1] = LAYOUT_tkl_f13_ansi_tsangan(
+    [_MAGIC] = LAYOUT_tkl_f13_ansi_tsangan(
         KC_ESC,  _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, VDSK_LK, KC_MSTP, KC_MPRV, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, KC_PSCR, _______, _______, _______, _______, _______, _______,
@@ -65,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                                           _______, _______, _______, _______, _______, _______
     ),
 
-    [2] = LAYOUT_tkl_f13_ansi_tsangan(
+    [_FN] = LAYOUT_tkl_f13_ansi_tsangan(
         QK_BOOT, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______,  _______, _______,
@@ -74,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                                           _______, _______, _______, RGB_RMOD, RGB_HUD, RGB_MOD
     ),
 
-    [3] = LAYOUT_tkl_f13_ansi_tsangan(
+    [_GAME] = LAYOUT_tkl_f13_ansi_tsangan(
         KC_ESC,  _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
@@ -85,12 +90,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-const rgblight_segment_t PROGMEM layer_0[] = RGBLIGHT_LAYER_SEGMENTS({0, 0, HSV_BLACK}); // unused
-const rgblight_segment_t PROGMEM layer_1[] = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_CYAN});
-const rgblight_segment_t PROGMEM layer_2[] = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_GREEN});
-const rgblight_segment_t PROGMEM layer_3[] = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_RED});
+const rgblight_segment_t PROGMEM _black_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 0, HSV_BLACK}); // unused
+const rgblight_segment_t PROGMEM _cyan_layer[]  = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_CYAN});
+const rgblight_segment_t PROGMEM _green_Layer[] = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_GREEN});
+const rgblight_segment_t PROGMEM _red_layer[]   = RGBLIGHT_LAYER_SEGMENTS({0, 20, HSV_RED});
 
-const rgblight_segment_t *const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(layer_0, layer_1, layer_2, layer_3);
+const rgblight_segment_t *const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(_black_layer, _cyan_layer, _green_Layer, _red_layer);
 
 void keyboard_post_init_user(void) {
     rgblight_layers = my_rgb_layers;
@@ -116,10 +121,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    rgblight_set_layer_state(0, layer_state_cmp(state, 0));
-    rgblight_set_layer_state(1, layer_state_cmp(state, 1));
+    rgblight_set_layer_state(0, IS_LAYER_ON_STATE(state, _BASE));
+    rgblight_set_layer_state(1, IS_LAYER_ON_STATE(state, _MAGIC));
 
-    if (IS_LAYER_ON_STATE(state, 1)) {
+    if (IS_LAYER_ON_STATE(state, _MAGIC)) {
         register_code(KC_F24);
     } else {
         unregister_code(KC_F24);
