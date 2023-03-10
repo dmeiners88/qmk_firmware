@@ -1,7 +1,6 @@
 #pragma once
 
 #define TAPPING_TERM 133
-#define TAPPING_TERM_PER_KEY
 
 #ifdef LOCKING_SUPPORT_ENABLE
 #    undef LOCKING_SUPPORT_ENABLE

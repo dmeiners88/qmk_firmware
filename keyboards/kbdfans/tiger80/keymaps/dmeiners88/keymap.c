@@ -7,23 +7,8 @@
 
 enum my_keycodes { VDSK_CH = SAFE_RANGE, VDSK_LK };
 
-enum my_tap_dances { TR_ESC };
-
 static bool vdesk_state = false;
 static bool vdesk_lock  = false;
-
-void triple_esc(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 3) {
-        tap_code16(LALT(KC_F4));
-    } else {
-        for (int i = 0; i < state->count; i++) {
-            tap_code(KC_ESC);
-        }
-    }
-    reset_tap_dance(state);
-}
-
-tap_dance_action_t tap_dance_actions[] = {[TR_ESC] = ACTION_TAP_DANCE_FN(triple_esc)};
 
 void change_virtual_desktop(void) {
     if (vdesk_lock) {
@@ -53,7 +38,7 @@ bool conditionally_reset_keyboard(void) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_BASE] = LAYOUT_tkl_f13_ansi_tsangan(
-        TD(TR_ESC), KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,         KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  VDSK_CH, KC_MPLY, KC_MNXT, KC_MUTE,
+        KC_ESC,     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,         KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  VDSK_CH, KC_MPLY, KC_MNXT, KC_MUTE,
         KC_GRV,     KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,          KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_INS,  KC_HOME, KC_PGUP,
         KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,          KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,  KC_END,  KC_PGDN,
         MO(1),      KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,          KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
@@ -62,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_MAGIC] = LAYOUT_tkl_f13_ansi_tsangan(
-        KC_ESC,  _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, VDSK_LK, KC_MSTP, KC_MPRV, _______,
+        _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, VDSK_LK, KC_MSTP, KC_MPRV, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, KC_PSCR, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,
@@ -80,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
     [_GAME] = LAYOUT_tkl_f13_ansi_tsangan(
-        KC_ESC,  _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______,  _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,       _______, _______, _______, _______, _______,          _______,
@@ -131,13 +116,4 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     }
 
     return state;
-}
-
-uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case TD(TR_ESC):
-            return 250;
-        default:
-            return TAPPING_TERM;
-    }
 }
